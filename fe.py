@@ -48,6 +48,7 @@ def list(root=defaultroot):
 				except:
 					print "Couldn't get child from: %s" % p
 	b = [ rr, d, enabledelete ]
+	zk.stop()
 	return template('list', res=b)
 
 @route('/edit/<path>')
@@ -55,6 +56,7 @@ def edit(path):
 	p = path.replace("|","/")
 	x = zk.get(p)[0]
 	y = [ p, x]
+	zk.stop()
 	return template('edit', res=y)
 
 @post('/editsub')
@@ -66,6 +68,7 @@ def editsub():
 	try:
 		zk.set(rp, content)
 		x = [ uf, rp ]	
+		zk.stop()
 		return template('editsub', res=x)
 		#return "OK: updated!<p><a href=\"/%s\">return to %s</a><p>" % (node,rp)
 	except:
@@ -86,6 +89,7 @@ def createsub():
 			zk.create(fpath, value=content, makepath=True)
 		else:
 			zk.create(fpath, makepath=True)
+		zk.stop()
 		return template('createsub', res=fpath)
 	except:
 		return "ERROR: unable to create %s!" % fpath
@@ -96,6 +100,7 @@ def delete(path):
 	try:
 		p = path.replace("|","/")
 		zk.delete(p, recursive=True)
+		zk.stop()
         	return template('delete', res=p)
 	except:
 		return "ERROR: unable to delete %s!" % p
