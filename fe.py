@@ -5,6 +5,7 @@ import json
 from ConfigParser import SafeConfigParser
 from bottle import route, run, get, abort, post, request, template, redirect, default_app, debug, TEMPLATE_PATH
 from kazoo.client import KazooClient
+from kazoo.retry import KazooRetry
 
 if os.path.exists('./zk.conf'):
    parser = SafeConfigParser()
@@ -29,6 +30,7 @@ enabledenvs = parser.get('fe', 'enabledelete').strip()
 
 server = "%s:%s" % (zkserver,zkport)
 
+kr = KazooRetry(max_tries=3)
 zk = KazooClient(hosts=server)
 zk.start()
 
@@ -39,24 +41,22 @@ def list(root=defaultroot):
 	rr = root.replace("|","/")
 	if rr:
 		if rr != "favicon.ico":
-			x = zk.get_children(rr)
+			x = kr(zk.get_children, rr)
 			for i in x:
 				try:
 					p = "%s/%s" % (rr,i)
-					y = zk.get(p)[0]
+					y = kr(zk.get,p)[0]
 					d[i] = y
 				except:
 					print "Couldn't get child from: %s" % p
 	b = [ rr, d, enabledelete ]
-	#zk.stop()
 	return template('list', res=b)
 
 @route('/edit/<path>')
 def edit(path):
 	p = path.replace("|","/")
-	x = zk.get(p)[0]
+	x = kr(zk.get,p)[0]
 	y = [ p, x]
-	#zk.stop()
 	return template('edit', res=y)
 
 @post('/editsub')
@@ -66,11 +66,9 @@ def editsub():
 	rp = node.replace("|","/")
 	content = request.forms.get('content')
 	try:
-		zk.set(rp, content)
+		kr(zk.set,rp,content)
 		x = [ uf, rp ]	
-		#zk.stop()
 		return template('editsub', res=x)
-		#return "OK: updated!<p><a href=\"/%s\">return to %s</a><p>" % (node,rp)
 	except:
 		return "ERROR: unable to update %s" % node
 
@@ -86,10 +84,9 @@ def createsub():
 	fpath = "%s/%s" % (path,node)
 	try:
 		if content:
-			zk.create(fpath, value=content, makepath=True)
+			kr(zk.create,fpath,value=content,makepath=True)
 		else:
-			zk.create(fpath, makepath=True)
-		#zk.stop()
+			kr(zk.create,fpath,makepath=True)
 		return template('createsub', res=fpath)
 	except:
 		return "ERROR: unable to create %s!" % fpath
@@ -99,8 +96,7 @@ def delete(path):
 	p = path.replace("|","/")
 	try:
 		p = path.replace("|","/")
-		zk.delete(p, recursive=True)
-		#zk.stop()
+		kr(zk.delete,p,recursive=True)
         	return template('delete', res=p)
 	except:
 		return "ERROR: unable to delete %s!" % p
