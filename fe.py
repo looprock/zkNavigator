@@ -17,7 +17,8 @@ else:
    print "No config file found! Please create: ./zk.conf or /etc/zktools/zk.conf"
    sys.exit(1)
 
-env = parser.get('fe', 'defaultenv').strip()
+#env = parser.get('fe', 'defaultenv').strip()
+env = parser.get('default', 'env').strip()
 zkserver = parser.get(env, 'server').strip()
 zkport = parser.get(env, 'port').strip()
 defaultroot = parser.get(env, 'root').strip().replace("/","|")
