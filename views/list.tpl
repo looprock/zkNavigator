@@ -8,7 +8,7 @@
 %end
 /{{x[len(x)-1]}} </h2> 
 <a href="/create/{{res[0].replace("/","|")}}">create new leaf node</a><hr><p>
-%for i in res[1].keys():
+%for i in sorted(res[1].keys()):
 	%root = res[0].replace("/","|")
 	<a href="/{{root}}|{{i}}">{{i}}</a>
 	%if res[2] == 'T':
