@@ -1,5 +1,5 @@
 <h2>{{res[0]}}</h2>
-<form name="myform" action="/editsub" method="POST">
+<form name="myform" action="{{res[2]}}/editsub" method="POST">
 <textarea cols="80" rows="20" name="content">
 %x = res[1]
 {{!x}}

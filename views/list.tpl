@@ -4,19 +4,19 @@
 %l = ""
 %for i in range(1,len(x)-1):
         %l += "|%s" % x[i]
-        <a href="{{l}}">/{{x[i]}}</a>
+        <a href="{{res[3]}}/{{l}}">/{{x[i]}}</a>
 %end
 /{{x[len(x)-1]}} </h2> 
-<a href="/create/{{res[0].replace("/","|")}}">create new leaf node</a><hr><p>
+<a href="{{res[3]}}/create/{{res[0].replace("/","|")}}">create new leaf node</a><hr><p>
 %for i in sorted(res[1].keys()):
 	%root = res[0].replace("/","|")
-	<a href="/{{root}}|{{i}}">{{i}}</a>
+	<a href="{{res[3]}}/{{root}}|{{i}}">{{i}}</a>
 	%if res[2] == 'T':
-		 - [<a href="/delete/{{root}}|{{i}}">delete</a>]
+		 - [<a href="{{res[3]}}/delete/{{root}}|{{i}}">delete</a>]
 	%end
 	<br>
 	%if res[1][i]:
-		<hr width=50% align=left><b>CONTENT:</b> (<a href="/edit/{{root}}|{{i}}">edit</a>)<br>
+		<hr width=50% align=left><b>CONTENT:</b> (<a href="{{res[3]}}/edit/{{root}}|{{i}}">edit</a>)<br>
 		<pre>{{res[1][i]}}</pre><hr width=50% align=left>
 	%end
 	<p>

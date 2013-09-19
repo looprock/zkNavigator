@@ -1,8 +1,8 @@
 <h2>Success!</h2>
-OK: created {{res}}!<p>
-%x = res.split("/")
+OK: created {{res[0]}}!<p>
+%x = res[0].split("/")
 %l = ""
 %for i in range(1,len(x)-1):
 	%l += "|%s" % x[i]
-	<a href="{{l}}">/{{x[i]}}</a> 
+	<a href="{{res[1]}}/{{l}}">/{{x[i]}}</a> 
 %end
