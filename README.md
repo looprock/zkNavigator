@@ -10,15 +10,21 @@ zkNavigator is a bottle based application that gives you a quick and dirty zooke
 == Configuration
 
 === default section
+
 env - defines what zookeeper configuration to use below RE: alpha
+
 apptype - to use as described above, set to standalone but can also be used under wsgi - options: standalone, wsgi
+
 rootdir = - path your running this from
+
 templatedir - path to your views directory
+
 virtualenv - running under virtualenv?: True/False
+
 activate_this - if True above, this is your path to activate_this.py
 
 These are examples multiple environment configurations. You need to have at least one section that maps to env in the default section:
-
+<code>
 [local]
 server = localhost
 port = 2181
@@ -33,6 +39,7 @@ root = /
 server = beta.zk.server.com
 port = 2181
 root = /
+</code>
 
 === fe section
 baseurl - where do you hit / for this app?
