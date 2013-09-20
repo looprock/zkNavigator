@@ -24,7 +24,7 @@ virtualenv - running under virtualenv?: True/False
 activate_this - if True above, this is your path to activate_this.py
 
 These are examples multiple environment configurations. You need to have at least one section that maps to env in the default section:
-<code>
+<pre>
 [local]
 server = localhost
 port = 2181
@@ -39,7 +39,7 @@ root = /
 server = beta.zk.server.com
 port = 2181
 root = /
-</code>
+</pre>
 
 === fe section
 baseurl - where do you hit / for this app?
