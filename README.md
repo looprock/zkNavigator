@@ -42,5 +42,7 @@ root = /
 </pre>
 
 === fe section
+
 baseurl - where do you hit / for this app?
+
 enabledelete - enable the delete link on all the zNodes, kinda dangerous - options: T/F
