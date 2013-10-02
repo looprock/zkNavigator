@@ -53,7 +53,7 @@ from kazoo.retry import KazooRetry
 root = os.path.join(rootdir)
 sys.path.insert(0, root)
 
-from bottle import route, run, get, abort, post, request, template, redirect, default_app, debug, TEMPLATE_PATH
+from bottle import route, run, get, abort, post, request, template, redirect, default_app, debug, TEMPLATE_PATH, response
 
 TEMPLATE_PATH.insert(0,templatedir)
 
@@ -93,6 +93,16 @@ def list(root=defaultroot):
 					print "Couldn't get child from: %s" % p
 	b = [ rr, d, enabledelete, baseurl ]
 	return template('list', res=b)
+
+@route('/json/')
+@route('/json/<root>')
+def list(root=defaultroot):
+        response.content_type = 'application/json'
+        rr = root.replace("|","/")
+        if rr:
+                if rr != "favicon.ico":
+                        x = kr(zk.get_children, rr)
+                        return json.dumps(sorted(x))
 
 @route('/edit/<path>')
 def edit(path):
