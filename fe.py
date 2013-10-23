@@ -74,16 +74,6 @@ def edit(path):
 @post('/editsub')
 def editsub():
 	node = request.forms.get('node').replace("|","/")
-	# if we're modifying to /vast/envs/.*/sites/*, update /vast/envs/.*/sites
-	if re.search('/vast/envs/.*/sites', node, re.IGNORECASE):
-		fp = node.split('/')
-		print fp
-		sites = '/%s/%s/%s/%s' % (fp[1],fp[2],fp[3],fp[4])
-		ts = strftime('%Y-%m-%dT%H:%M:%S%Z', localtime())
-		try:
-			kr(zk.set, sites, ts)
-		except:
-			return "ERROR: unable to update %s!" % sites
 	uf = node.replace("/","|")
 	rp = node.replace("|","/")
 	content = request.forms.get('content')
@@ -101,16 +91,6 @@ def create(path):
 @post('/createsub')
 def createsub():
 	path = request.forms.get('path').replace("|","/")
-	# if we're modifying to /vast/envs/.*/sites/*, update /vast/envs/.*/sites
-        if re.search('/vast/envs/.*/sites', path, re.IGNORECASE):
-                fp = path.split('/')
-		print fp
-		sites = '/%s/%s/%s/%s' % (fp[1],fp[2],fp[3],fp[4])
-		ts = strftime('%Y-%m-%dT%H:%M:%S%Z', localtime())
-                try:
-                        kr(zk.set, sites, ts)
-                except:
-                        return "ERROR: unable to update %s!" % sites
 	node = request.forms.get('node')
 	content = request.forms.get('content')
 	fpath = "%s/%s" % (path,node)
@@ -126,17 +106,6 @@ def createsub():
 @route('/delete/<path>')
 def delete(path):
 	p = path.replace("|","/")
-	# if we're modifying to /vast/envs/.*/sites/*, update /vast/envs/.*/sites
-        if re.search('/vast/envs/.*/sites', p, re.IGNORECASE):
-                fp = p.split('/')
-		print fp
-		sites = '/%s/%s/%s/%s' % (fp[1],fp[2],fp[3],fp[4])
-		ts = strftime('%Y-%m-%dT%H:%M:%S%Z', localtime())
-		print sites
-                try:
-                        kr(zk.set, sites, ts)
-                except:
-                        return "ERROR: unable to update %s!" % sites
 	try:
 		p = path.replace("|","/")
 		kr(zk.delete,p,recursive=True)
