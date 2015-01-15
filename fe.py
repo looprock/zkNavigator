@@ -64,6 +64,15 @@ def list(root=defaultroot):
 			x = kr(zk.get_children, rr)
 			return json.dumps(x)
 
+@route('/content/')
+@route('/content/<root>')
+def list(root=defaultroot):
+        rr = root.replace("|","/")
+        if rr:
+                if rr != "favicon.ico":
+                        x = kr(zk.get, rr)[0]
+                        return x
+
 @route('/edit/<path>')
 def edit(path):
 	p = path.replace("|","/")
