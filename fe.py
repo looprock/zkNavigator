@@ -19,6 +19,7 @@ else:
    print "No config file found! Please create: ./zk.conf or /etc/zktools/zk.conf"
    sys.exit(1)
 
+bind = parser.get('default', 'bind').strip()
 env = parser.get('default', 'env').strip()
 zkserver = parser.get(env, 'server').strip()
 zkport = parser.get(env, 'port').strip()
@@ -123,5 +124,4 @@ def delete(path):
 		return "ERROR: unable to delete %s!" % p
 
 
-#run(host='0.0.0.0', port=8080, debug=True)
-run(port=8080, debug=True)
+run(host=bind, port=8080, debug=True)
