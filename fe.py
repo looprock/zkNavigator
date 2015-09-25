@@ -21,8 +21,8 @@ else:
 
 bind = parser.get('default', 'bind').strip()
 env = parser.get('default', 'env').strip()
-zkserver = parser.get(env, 'server').strip()
-zkport = parser.get(env, 'port').strip()
+zkserver = os.getenv('ZK_HOST', parser.get(env, 'server').strip())
+zkport = os.getenv('ZK_PORT', parser.get(env, 'port').strip())
 defaultroot = parser.get(env, 'root').strip().replace("/","|")
 enabledelete = parser.get('fe', 'enabledelete').strip()
 # these don't do anything yet
@@ -31,7 +31,8 @@ enablecreate = parser.get('fe', 'enabledelete').strip()
 enablerename = parser.get('fe', 'enabledelete').strip()
 enabledenvs = parser.get('fe', 'enabledelete').strip()
 
-server = "%s:%s" % (zkserver,zkport)
+server = os.getenv('ZK', "%s:%s" % (zkserver,zkport))
+print "zookeper:", server
 
 kr = KazooRetry(max_tries=3)
 zk = KazooClient(hosts=server)
