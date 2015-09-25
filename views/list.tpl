@@ -6,18 +6,34 @@
         %l += "|%s" % x[i]
         <a href="{{l}}">/{{x[i]}}</a>
 %end
-/{{x[len(x)-1]}} </h2> 
-<a href="/create/{{res[0].replace("/","|")}}">create new leaf node</a><hr><p>
+/{{x[len(x)-1]}} </h2>
+<a href="/create/{{res[0].replace("/","|")}}" class="btn btn-default">create new leaf node</a><hr>
+<table class="table table-striped">
 %for i in sorted(res[1].keys()):
 	%root = res[0].replace("/","|")
-	<a href="/{{root}}|{{i}}">{{i}}</a>
-	%if res[2] == 'T':
-		 - [<a href="/delete/{{root}}|{{i}}">delete</a>]
-	%end
-	<br>
+	<tr>
+	<td width="140px">
 	%if res[1][i]:
-		<hr width=50% align=left><b>CONTENT:</b> (<a href="/edit/{{root}}|{{i}}">edit</a>)<br>
-		<pre>{{res[1][i]}}</pre><hr width=50% align=left>
+		%element_id = i.replace('.', '-')
+		<a class="btn btn-default btn-xs" role="button" data-toggle="collapse" href="#collapse{{element_id}}" aria-expanded="false" aria-controls="collapse{{element_id}}">show content</a>
+		<a class="btn btn-primary btn-xs" href="/edit/{{root}}|{{i}}">edit</a>
+	%else:
+		%element_id = ''
 	%end
-	<p>
+		</td>
+		<td>
+			<span><a href="/{{root}}|{{i}}">{{i}}</a></span>
+			<div id="collapse{{element_id}}" class="panel-collapse collapse" role="tabpanel">
+	      <div class="panel-body">
+					<pre>{{res[1][i]}}</pre><hr width=50% align=left>
+				</div>
+			</div>
+		</td>
+		<td style="text-align:right">
+	%if res[2] == 'T':
+		<a class="btn btn-danger btn-xs" href="/delete/{{root}}|{{i}}" onclick="return confirm('Are you sure you want to delete {{i}}?')">&times;</a>
+	%end
+		</td>
+	</tr>
 %end
+</table>

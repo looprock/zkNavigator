@@ -37,6 +37,11 @@ kr = KazooRetry(max_tries=3)
 zk = KazooClient(hosts=server)
 zk.start()
 
+def tpl(name, **kwargs):
+  html = template(name, kwargs)
+  return template('layout', html=html)
+
+
 @route('/')
 @route('/<root>')
 def list(root=defaultroot):
@@ -53,7 +58,7 @@ def list(root=defaultroot):
 				except:
 					print "Couldn't get child from: %s" % p
 	b = [ rr, d, enabledelete ]
-	return template('list', res=b)
+	return tpl('list', res=b)
 
 @route('/json/')
 @route('/json/<root>')
@@ -79,7 +84,7 @@ def edit(path):
 	p = path.replace("|","/")
 	x = kr(zk.get,p)[0]
 	y = [ p, x]
-	return template('edit', res=y)
+	return tpl('edit', res=y)
 
 @post('/editsub')
 def editsub():
@@ -89,14 +94,14 @@ def editsub():
 	content = request.forms.get('content')
 	try:
 		kr(zk.set,rp,content)
-		x = [ uf, rp ]	
-		return template('editsub', res=x)
+		x = [ uf, rp ]
+		return tpl('editsub', res=x)
 	except:
 		return "ERROR: unable to update %s" % node
 
 @route('/create/<path>')
 def create(path):
-        return template('create', res=path)
+        return tpl('create', res=path)
 
 @post('/createsub')
 def createsub():
@@ -109,7 +114,7 @@ def createsub():
 			kr(zk.create,fpath,value=content,makepath=True)
 		else:
 			kr(zk.create,fpath,makepath=True)
-		return template('createsub', res=fpath)
+		return tpl('createsub', res=fpath)
 	except:
 		return "ERROR: unable to create %s!" % fpath
 
@@ -119,7 +124,7 @@ def delete(path):
 	try:
 		p = path.replace("|","/")
 		kr(zk.delete,p,recursive=True)
-        	return template('delete', res=p)
+        	return tpl('delete', res=p)
 	except:
 		return "ERROR: unable to delete %s!" % p
 
