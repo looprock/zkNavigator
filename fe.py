@@ -1,22 +1,26 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 import sys
 import os
 import json
 import re
-from ConfigParser import SafeConfigParser
+import logging
+
+logging.basicConfig()
+
+from configparser import ConfigParser
 from bottle import route, run, get, abort, post, request, template, redirect, default_app, debug, TEMPLATE_PATH, response
 from kazoo.client import KazooClient
 from kazoo.retry import KazooRetry
 from time import time, localtime, strftime
 
 if os.path.exists("./zk.conf"):
-    parser = SafeConfigParser()
+    parser = ConfigParser()
     parser.read("./zk.conf")
 elif os.path.exists("/etc/zktools/zk.conf"):
-    parser = SafeConfigParser()
+    parser = ConfigParser()
     parser.read("/etc/zktools/zk.conf")
 else:
-    print "No config file found! Please create: ./zk.conf or /etc/zktools/zk.conf"
+    print("No config file found! Please create: ./zk.conf or /etc/zktools/zk.conf")
     sys.exit(1)
 
 bind = parser.get("default", "bind").strip()
@@ -32,7 +36,7 @@ enablerename = parser.get("fe", "enabledelete").strip()
 enabledenvs = parser.get("fe", "enabledelete").strip()
 
 server = os.getenv("ZK", "%s:%s" % (zkserver, zkport))
-print "zookeper:", server
+print("zookeper:", server)
 
 kr = KazooRetry(max_tries=3)
 zk = KazooClient(hosts=server)
@@ -58,7 +62,7 @@ def list(root=defaultroot):
                     y = kr(zk.get, p)[0]
                     d[i] = y
                 except:
-                    print "Couldn't get child from: %s" % p
+                    print("Couldn't get child from: %s" % p)
     b = [rr, d, enabledelete]
     return tpl("list", res=b)
 

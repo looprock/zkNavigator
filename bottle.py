@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
 Bottle is a fast and simple micro-framework for small web applications. It
@@ -91,7 +91,7 @@ if py3k:
 
     urlunquote = functools.partial(urlunquote, encoding="latin1")
     from http.cookies import SimpleCookie
-    from collections import MutableMapping as DictMixin
+    from collections.abc import MutableMapping as DictMixin
     import pickle
     from io import BytesIO
 
@@ -2399,7 +2399,7 @@ class FileUpload(object):
         fname = re.sub(r"[-\s]+", "-", fname.strip(".").strip())
         return fname or "empty"
 
-    def _copy_file(self, fp, chunk_size=2 ** 16):
+    def _copy_file(self, fp, chunk_size=2**16):
         read, write, offset = self.file.read, fp.write, self.file.tell()
         while 1:
             buf = read(chunk_size)
@@ -2408,7 +2408,7 @@ class FileUpload(object):
             write(buf)
         self.file.seek(offset)
 
-    def save(self, destination, overwrite=False, chunk_size=2 ** 16):
+    def save(self, destination, overwrite=False, chunk_size=2**16):
         """Save file to disk or copy its content to an open file(-like) object.
         If *destination* is a directory, :attr:`filename` is added to the
         path. Existing files are not overwritten by default (IOError).
